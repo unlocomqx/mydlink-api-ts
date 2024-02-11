@@ -68,7 +68,7 @@ export class UrlUtils {
 				});
 			}
 		} catch (e) {
-			console.error(e.toString());
+			if (e instanceof Error) console.error(e.toString());
 		}
 		return response;
 	}
@@ -95,14 +95,5 @@ export class UrlUtils {
 				? response.request._redirectable._currentUrl
 				: response.config.url;
 		return new URL(locationUrl).searchParams;
-	}
-
-	static parse(value: string) {
-		try {
-			return JSON.parse(value);
-		} catch (e) {
-			console.error(`invalid json: ${e}`);
-			return null;
-		}
 	}
 }
