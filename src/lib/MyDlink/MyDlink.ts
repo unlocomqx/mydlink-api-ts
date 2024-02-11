@@ -70,14 +70,9 @@ export class MyDlink {
 		const device_detail_url = `https://${this.login_params.get('api_site')}/me/nvr/event/list?access_token=${this.login_params.get('access_token')}`;
 		const recording_date_start = new Date(year, month, day, 2, 0, 0);
 		const recording_date_end = new Date(year, month, day, 23, 59, 59, 999999);
-		const recording_timestampe_start = `${Math.floor(recording_date_start.getTime() / 1000)}00`;
-		const recording_timestampe_end = `${Math.floor(recording_date_end.getTime() / 1000)}`.slice(
-			0,
-			13
-		);
 		const json_object = {
-			end_ts: parseInt(recording_timestampe_end),
-			start_ts: parseInt(recording_timestampe_start)
+			end_ts: recording_date_end.getTime(),
+			start_ts: recording_date_start.getTime()
 		};
 		const json_object_final = { data: json_object };
 		const response = await this.url_utils.request(

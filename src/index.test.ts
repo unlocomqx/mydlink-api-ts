@@ -9,10 +9,6 @@ describe('lists events', async () => {
 	// test promise mydlink.get_device_list()
 	const device_list = await mydlink.get_device_list();
 	const today = new Date();
-	await mydlink.get_event_list_meta_infos(
-		today.getFullYear(),
-		today.getMonth() + 1,
-		today.getDate()
-	);
+	await mydlink.get_event_list_meta_infos(today.getFullYear(), today.getMonth(), today.getDate());
 	expect(device_list).toBeDefined();
 });
