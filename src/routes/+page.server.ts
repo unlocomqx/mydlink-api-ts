@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import type { Actions } from '@sveltejs/kit';
-import { MyDlink } from '$lib/MyDlink/MyDlink';
+import { type CloudImage, MyDlink } from '$lib/MyDlink/MyDlink';
 import { env } from '$env/dynamic/private';
 
 export const actions = {
@@ -9,11 +9,11 @@ export const actions = {
 		await mydlink.login();
 
 		const device_list = await mydlink.get_device_list();
-		const end_date = new Date();
-		const start_date = new Date(end_date.getTime() - 1000 * 60 * 60); // 1 hour ago
+		const end_date = new Date(2024, 1, 11, 7, 50);
+		const start_date = new Date(end_date.getTime() - 1000 * 60 * 10); // 1 hour ago
 		const events = await mydlink.get_event_list_meta_infos(start_date, end_date);
 		// const recordings = await mydlink.get_mydlink_cloud_recordings_urls(start_date, end_date);
-		const cloudImgsPromises = [];
+		const cloudImgsPromises: Promise<CloudImage>[] = [];
 		if ('data' in events['data'][0]) {
 			for (const event of events['data'][0]['data']) {
 				cloudImgsPromises.push(
@@ -24,7 +24,7 @@ export const actions = {
 		const cloudImgs = await Promise.all(cloudImgsPromises);
 
 		return {
-			images: cloudImgs
+			images: cloudImgs.filter((img) => img.path)
 		};
 	}
 } satisfies Actions;

@@ -1,6 +1,12 @@
 import { createHash } from 'crypto';
 import { UrlUtils } from '$lib/MyDlink/Url';
 
+export type CloudImage = {
+	path: string;
+	blank_list: number[];
+	attribute: string;
+};
+
 export class MyDlink {
 	private api_url = 'https://api.auto.mydlink.com';
 	private client_id = 'mydlinkuapandroid';
@@ -26,7 +32,7 @@ export class MyDlink {
 		const signature = this.md5Hashing(login_url + this.oauth_secret);
 		const request_url = `${this.api_url}${login_url}&sig=${signature}`;
 		const response = await this.url_utils.request(request_url, this.url_utils.TYPE_GET);
-		this.login_params = this.url_utils.getParams(response);
+		if (response) this.login_params = this.url_utils.getParams(response);
 	}
 
 	async get_device_list() {
@@ -111,11 +117,7 @@ export class MyDlink {
 	async get_mydlink_cloud_img_url(
 		mydlink_id: string,
 		event_timestamp: string
-	): Promise<{
-		path: string;
-		blank_list: number[];
-		attribute: string;
-	}> {
+	): Promise<CloudImage> {
 		const json_object = { mydlink_id: mydlink_id, timestamp: event_timestamp };
 		const json_object_final = { data: json_object };
 		const storyboard_img_url = `https://${this.login_params.get('api_site')}/me/nvr/storyboard/info?access_token=${this.login_params.get('access_token')}`;

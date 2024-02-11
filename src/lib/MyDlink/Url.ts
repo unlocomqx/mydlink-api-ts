@@ -55,22 +55,25 @@ export class UrlUtils {
 		}
 	}
 
-	async request(url: string, requestType = 'post', inputJson: object | null = null) {
-		let response = null;
+	async request(
+		url: string,
+		requestType = 'post',
+		inputJson: object | null = null
+	): Promise<AxiosResponse | undefined> {
+		let response: AxiosResponse;
 		try {
 			if (requestType === this.TYPE_POST) {
-				response = await axios.post(url, inputJson, {
+				return axios.post(url, inputJson, {
 					headers: this.headersPost
 				});
 			} else if (requestType === this.TYPE_GET) {
-				response = await axios.get(url, {
+				return axios.get(url, {
 					headers: this.headersGet
 				});
 			}
 		} catch (e) {
 			if (e instanceof Error) console.error(e.toString());
 		}
-		return response;
 	}
 
 	async streamFile(url: string) {
