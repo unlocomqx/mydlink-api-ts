@@ -1,11 +1,16 @@
 POST https://mp-sg-openapi.auto.mydlink.com/me/nvr/event/list?access_token=ezDMdImFD3tIHkB6KJcBszX8qdajjZlF
-User-Agent: Mozilla/5.0,
-Connection: Keep-Alive,
-Accept: */*,
-Content-Type: application/json,
-x-md-lang: de,
-x-md-app-ver: 02.00.01.75,
-x-md-os-type: android,
+User-Agent: Mozilla/5.0
+Connection: Keep-Alive
+Accept: */*
+Content-Type: application/json
+x-md-lang: de
+x-md-app-ver: 02.00.01.75
+x-md-os-type: android
 x-md-os-version: 7.0
 
-{data: {end_ts: 1707692399999, start_ts: 1707613200000}}
+{
+  "data": {
+    "end_ts": 1707692399999,
+    "start_ts": 1707613200000
+  }
+}
