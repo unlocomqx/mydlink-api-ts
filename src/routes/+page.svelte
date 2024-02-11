@@ -11,7 +11,7 @@
 	</button>
 </form>
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 my-4">
 	{#each images.filter(i => i.path) as { path }}
 		<img src={path} alt="Preview" />
 	{/each}
