@@ -57,17 +57,18 @@ export class MyDlink {
 	}
 
 	async get_mydlink_cloud_recordings_urls(start_date: Date, end_date: Date) {
-		const event_list_meta_json = await this.get_event_list_meta_infos(start_date, end_date);
+		// this returns an array. TODO: fix next code to handle array
+		const events_list = await this.get_event_list_meta_infos(start_date, end_date);
 		let all_events_details_json;
-		if ('path' in event_list_meta_json['data'][0]) {
+		if ('path' in events_list['data'][0]) {
 			const response_all_events_details = await this.url_utils.request(
-				event_list_meta_json['data'][0]['path'],
+				events_list['data'][0]['path'],
 				this.url_utils.TYPE_GET
 			);
 			all_events_details_json = response_all_events_details?.data;
 			all_events_details_json = all_events_details_json['data'][0]['data'];
 		} else {
-			all_events_details_json = event_list_meta_json['data'][0]['data'];
+			all_events_details_json = events_list['data'][0]['data'];
 		}
 		return this.__get_mydlink_cloud_recordings_file(all_events_details_json);
 	}
@@ -91,7 +92,10 @@ export class MyDlink {
 			response?.data['data'][0]['path'],
 			this.url_utils.TYPE_GET
 		);
-		return response_all_events_details?.data;
+		const events = response_all_events_details?.data['data']['0']['data'];
+		return events.filter(
+			(e) => e.timestamp > start_date.getTime() && e.timestamp < end_date.getTime()
+		);
 	}
 
 	async __get_mydlink_cloud_recordings_file(datas: any[]) {

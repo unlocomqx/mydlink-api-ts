@@ -1,6 +1,11 @@
 import type { CloudImage } from '$lib/MyDlink/MyDlink';
 import Jimp from 'jimp';
 
+export type SnapshotList = CloudImage & {
+	id: string;
+	snapshots: string[];
+};
+
 function getSections(cloudImage: CloudImage) {
 	const [cols, rows, col_width, row_height] = cloudImage.attribute.split(',').map(Number);
 	const sections: Array<{
@@ -31,12 +36,11 @@ function getSections(cloudImage: CloudImage) {
 	return sections;
 }
 
-export async function detectPeople(cloudImage: CloudImage) {
-	// const input = (await axios({ url: cloudImage.path, responseType: 'arraybuffer' })).data as Buffer;
-
+export async function getSnapshotList(cloudImage: CloudImage): Promise<SnapshotList> {
+	const random_id = Math.random().toString(36).substring(7);
 	const img = await Jimp.read(cloudImage.path);
 	const sections = getSections(cloudImage);
-	const snapshots: Buffer[] = [];
+	const snapshots: string[] = [];
 	for (const section of sections) {
 		img
 			.clone()
@@ -45,13 +49,17 @@ export async function detectPeople(cloudImage: CloudImage) {
 				if (err) {
 					console.log('Error extracting section', section, err);
 				} else {
-					snapshots.push(buffer);
+					// turn buffer to base64
+					const uri = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+					snapshots.push(uri);
 				}
 				return buffer;
 			});
 	}
 
-	console.log(snapshots);
-
-	const a = 1;
+	return {
+		id: random_id,
+		...cloudImage,
+		snapshots
+	};
 }

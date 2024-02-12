@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import type { Actions } from '@sveltejs/kit';
 import { type CloudImage, MyDlink } from '$lib/MyDlink/MyDlink';
 import { env } from '$env/dynamic/private';
-import { detectPeople } from '$lib/detector/detector';
+import { getSnapshotList } from '$lib/detector/detector';
 
 export const actions = {
 	async default() {
@@ -15,21 +15,18 @@ export const actions = {
 		const events = await mydlink.get_event_list_meta_infos(start_date, end_date);
 		// const recordings = await mydlink.get_mydlink_cloud_recordings_urls(start_date, end_date);
 		const cloudImgsPromises: Promise<CloudImage>[] = [];
-		if ('data' in events['data'][0]) {
-			for (const event of events['data'][0]['data']) {
-				cloudImgsPromises.push(
-					mydlink.get_mydlink_cloud_img_url(event['mydlink_id'], event['timestamp'])
-				);
-			}
+		for (const event of events) {
+			cloudImgsPromises.push(
+				mydlink.get_mydlink_cloud_img_url(event['mydlink_id'], event['timestamp'])
+			);
 		}
 		const cloudImgs = await Promise.all(cloudImgsPromises);
-		console.log(cloudImgs);
 
-		const detection = await Promise.all(cloudImgs.map(detectPeople));
+		const snapshot_list = await Promise.all(cloudImgs.filter((i) => i.path).map(getSnapshotList));
 		// console.log(events);
 
 		return {
-			images: cloudImgs.filter((img) => img.path)
+			snapshot_list
 		};
 	}
 } satisfies Actions;

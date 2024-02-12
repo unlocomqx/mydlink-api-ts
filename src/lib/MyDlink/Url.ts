@@ -15,33 +15,11 @@ export class UrlUtils {
 
 	constructor(proxy: string | null, disableUnverifiedHttpsWarn = true) {
 		this.proxies = null;
-		this.headersGet = {
-			'User-Agent': 'Mozilla/5.0',
-			Connection: 'Keep-Alive',
-			Accept: '*/*',
-			'x-md-lang': 'de',
-			'x-md-app-ver': '02.00.01.75',
-			'x-md-os-type': 'android',
-			'x-md-os-version': '7.0'
-		};
+		this.headersGet = {};
 		this.headersPost = {
-			'User-Agent': 'Mozilla/5.0',
-			Connection: 'Keep-Alive',
-			Accept: '*/*',
-			'Content-Type': 'application/json',
-			'x-md-lang': 'de',
-			'x-md-app-ver': '02.00.01.75',
-			'x-md-os-type': 'android',
-			'x-md-os-version': '7.0'
+			'Content-Type': 'application/json'
 		};
 		this.headersStream = {
-			'User-Agent': 'Mozilla/5.0',
-			Connection: 'Keep-Alive',
-			Accept: '*/*',
-			'x-md-lang': 'de',
-			'x-md-app-ver': '02.00.01.75',
-			'x-md-os-type': 'android',
-			'x-md-os-version': '7.0',
 			'Content-Type': 'application/x-mpegURL; charset=utf-8'
 		};
 		if (proxy !== null) {
@@ -60,7 +38,6 @@ export class UrlUtils {
 		requestType = 'post',
 		inputJson: object | null = null
 	): Promise<AxiosResponse | undefined> {
-		let response: AxiosResponse;
 		try {
 			if (requestType === this.TYPE_POST) {
 				return axios.post(url, inputJson, {
