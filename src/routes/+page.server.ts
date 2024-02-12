@@ -23,9 +23,10 @@ export const actions = {
 			}
 		}
 		const cloudImgs = await Promise.all(cloudImgsPromises);
+		console.log(cloudImgs);
 
 		const detection = await Promise.all(cloudImgs.map(detectPeople));
-		console.log(events);
+		// console.log(events);
 
 		return {
 			images: cloudImgs.filter((img) => img.path)

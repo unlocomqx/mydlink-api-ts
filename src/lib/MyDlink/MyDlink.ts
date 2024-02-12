@@ -84,7 +84,14 @@ export class MyDlink {
 			this.url_utils.TYPE_POST,
 			json_object_final
 		);
-		return response?.data;
+		if (response?.data['data'][0]['path'] === undefined) {
+			return response?.data;
+		}
+		const response_all_events_details = await this.url_utils.request(
+			response?.data['data'][0]['path'],
+			this.url_utils.TYPE_GET
+		);
+		return response_all_events_details?.data;
 	}
 
 	async __get_mydlink_cloud_recordings_file(datas: any[]) {

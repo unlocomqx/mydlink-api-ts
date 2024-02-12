@@ -35,7 +35,6 @@ export async function detectPeople(cloudImage: CloudImage) {
 	// const input = (await axios({ url: cloudImage.path, responseType: 'arraybuffer' })).data as Buffer;
 
 	const img = await Jimp.read(cloudImage.path);
-	const metadata = img.bitmap;
 	const sections = getSections(cloudImage);
 	const snapshots: Buffer[] = [];
 	for (const section of sections) {
@@ -52,22 +51,7 @@ export async function detectPeople(cloudImage: CloudImage) {
 			});
 	}
 
-	// const img = sharp(input);
-	// const metadata = await img.metadata();
-	// const sections = getSections(cloudImage, metadata);
-	// const snapshots: Buffer[] = [];
-	// console.log(cloudImage.path);
-	// const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-	// for await (const section of sections) {
-	// 	const snapshot = await img
-	// 		.extract(section)
-	// 		.toBuffer()
-	// 		.catch((e) => {
-	// 			console.log('Error extracting section', section, e);
-	// 			return Buffer.from([]);
-	// 		});
-	// 	await delay(1000);
-	// 	snapshots.push(snapshot);
-	// }
+	console.log(snapshots);
+
 	const a = 1;
 }
